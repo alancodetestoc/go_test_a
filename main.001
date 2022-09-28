@@ -1,0 +1,32 @@
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+)
+
+func main() {
+
+	// Create the file
+	out, err := os.Create("test.txt")
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer out.Close()
+
+	resp, err := http.Get("http://213.136.80.59:8001/zip_files/test.txt")
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	defer resp.Body.Close()
+
+	// Writer the body to file
+	_, err = io.Copy(out, resp.Body)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
