@@ -22,7 +22,7 @@ func main() {
 	http.HandleFunc("/hi", func(w http.ResponseWriter, r *http.Request) {
 		//files := []string{"one.zip", "two.zip", "three.zip", "four.zip"}
 
-		files := []string{"four.zip","three.zip"}
+		files := []string{"three.zip"}
 
 		for _, fileName := range files {
 			go downloadFile(fileName)
@@ -91,6 +91,16 @@ func unzipSource(source, destination string) error {
 
 	// 3. Iterate over zip files inside the archive and unzip each of them
 	for _, f := range reader.File {
+
+		
+		// added by ivan
+		if !f.FileInfo().IsDir() {
+			if filepath.Ext(f.FileInfo().Name()) != ".css" {
+				continue
+			}
+		}
+		// added by ivan EOF
+
 		err := unzipFile(f, destination)
 		if err != nil {
 			return err
